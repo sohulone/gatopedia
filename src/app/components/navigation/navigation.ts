@@ -1,10 +1,12 @@
 import { Component, signal } from '@angular/core';
 import { SearchModal } from '../search-modal/search-modal';
 import { RouterModule } from '@angular/router';
+import { UserMenu } from '../user-menu/user-menu';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-navigation',
-  imports: [RouterModule, SearchModal],
+  imports: [CommonModule, RouterModule, SearchModal, UserMenu],
   templateUrl: './navigation.html',
   styleUrl: './navigation.css',
 })
