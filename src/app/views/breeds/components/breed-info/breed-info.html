@@ -1,0 +1,55 @@
+@if (breedInfo()) {
+  <div class="bg-white/95 backdrop-blur-sm rounded-3xl p-8 shadow-2xl">
+    <h2 class="text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-purple-700 to-indigo-700 mb-6">
+      {{ breedInfo()!.name }}
+    </h2>
+    
+    @if (breedInfo()!.description) {
+      <p class="text-lg text-gray-700 leading-relaxed mb-8 border-l-4 border-purple-500 pl-4 py-2 bg-purple-50/50 rounded-r-lg">
+        {{ breedInfo()!.description }}
+      </p>
+    }
+    
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      @if (breedInfo()!.origin) {
+        <div class="flex items-start gap-3 p-4 bg-gradient-to-br from-purple-50 to-indigo-50 rounded-2xl border border-purple-100 hover:shadow-md transition-shadow duration-300">
+          <span class="text-2xl">🌍</span>
+          <div>
+            <span class="block text-sm font-semibold text-purple-700 uppercase tracking-wide mb-1">Origen</span>
+            <span class="text-gray-800 font-medium">{{ breedInfo()!.origin }}</span>
+          </div>
+        </div>
+      }
+      
+      @if (breedInfo()!.temperament) {
+        <div class="flex items-start gap-3 p-4 bg-gradient-to-br from-purple-50 to-indigo-50 rounded-2xl border border-purple-100 hover:shadow-md transition-shadow duration-300">
+          <span class="text-2xl">💝</span>
+          <div>
+            <span class="block text-sm font-semibold text-purple-700 uppercase tracking-wide mb-1">Temperamento</span>
+            <span class="text-gray-800 font-medium">{{ breedInfo()!.temperament }}</span>
+          </div>
+        </div>
+      }
+      
+      @if (breedInfo()!.life_span) {
+        <div class="flex items-start gap-3 p-4 bg-gradient-to-br from-purple-50 to-indigo-50 rounded-2xl border border-purple-100 hover:shadow-md transition-shadow duration-300">
+          <span class="text-2xl">⏱️</span>
+          <div>
+            <span class="block text-sm font-semibold text-purple-700 uppercase tracking-wide mb-1">Esperanza de vida</span>
+            <span class="text-gray-800 font-medium">{{ breedInfo()!.life_span }} años</span>
+          </div>
+        </div>
+      }
+      
+      @if (breedInfo()!.weight) {
+        <div class="flex items-start gap-3 p-4 bg-gradient-to-br from-purple-50 to-indigo-50 rounded-2xl border border-purple-100 hover:shadow-md transition-shadow duration-300">
+          <span class="text-2xl">⚖️</span>
+          <div>
+            <span class="block text-sm font-semibold text-purple-700 uppercase tracking-wide mb-1">Peso</span>
+            <span class="text-gray-800 font-medium">{{ breedInfo()!.weight?.metric }} kg</span>
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+}

@@ -1,0 +1,49 @@
+<div class="min-h-screen flex items-center justify-center p-8 bg-[url('/images/background-purple-1.png')] bg-no-repeat bg-cover">
+  <div class="max-w-4xl w-full">
+    <div class="bg-white/95 rounded-3xl p-12 text-center shadow-2xl mb-8">
+      <h1 class="text-5xl font-extrabold text-gray-800 mb-2 leading-tight">
+        🐱 Explora el Mundo de los Gatos
+      </h1>
+      <p class="text-2xl text-purple-600 font-semibold mb-8">
+        Descubre las Razas Felinas más Fascinantes
+      </p>
+      
+      <div class="max-w-2xl mx-auto mb-10 text-gray-600 text-lg leading-relaxed">
+        <p class="mb-4">
+          Bienvenido a nuestra enciclopedia de razas de gatos. Aquí podrás explorar 
+          información detallada sobre diferentes razas felinas, conocer sus características 
+          únicas, temperamento, origen y ver hermosas imágenes de cada una.
+        </p>
+        <p>
+          Desde el elegante Siamés hasta el adorable Maine Coon, cada raza tiene su 
+          propia personalidad y encanto especial.
+        </p>
+      </div>
+
+      <button 
+        (click)="navigateToBreeds()"
+        class="bg-linear-to-r from-purple-600 to-indigo-700 text-white px-10 py-4 text-xl font-semibold rounded-full inline-flex items-center gap-2 shadow-lg shadow-purple-500/40 hover:-translate-y-1 hover:shadow-xl hover:shadow-purple-500/50 active:translate-y-0 transition-all duration-300">
+        <span>Ver Razas de Gatos</span>
+        <span class="text-2xl transition-transform duration-300 group-hover:translate-x-1">→</span>
+      </button>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div class="bg-white/95 p-8 rounded-2xl text-center shadow-xl hover:-translate-y-2 hover:shadow-2xl transition-all duration-300">
+        <div class="text-5xl mb-4">📚</div>
+        <h3 class="text-gray-800 text-xl font-bold mb-2">Información Completa</h3>
+        <p class="text-gray-600">Detalles sobre origen, temperamento y características</p>
+      </div>
+      <div class="bg-white/95 p-8 rounded-2xl text-center shadow-xl hover:-translate-y-2 hover:shadow-2xl transition-all duration-300">
+        <div class="text-5xl mb-4">🖼️</div>
+        <h3 class="text-gray-800 text-xl font-bold mb-2">Galería de Imágenes</h3>
+        <p class="text-gray-600">Hermosas fotos de cada raza</p>
+      </div>
+      <div class="bg-white/95 p-8 rounded-2xl text-center shadow-xl hover:-translate-y-2 hover:shadow-2xl transition-all duration-300">
+        <div class="text-5xl mb-4">🔍</div>
+        <h3 class="text-gray-800 text-xl font-bold mb-2">Fácil Búsqueda</h3>
+        <p class="text-gray-600">Encuentra tu raza favorita rápidamente</p>
+      </div>
+    </div>
+  </div>
+</div>

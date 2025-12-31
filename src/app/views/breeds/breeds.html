@@ -1,0 +1,34 @@
+<div class="min-h-screen bg-[url('/images/background-purple-2.png')] bg-no-repeat bg-cover py-12 px-4">
+  <main class="max-w-4xl mx-auto">
+    <!-- Header section with selector -->
+    <section class="relative bg-white/95 backdrop-blur-sm rounded-3xl py-16 px-8 md:px-16 shadow-2xl mb-8">
+      <!-- Decorative elements -->
+      <div class="absolute -top-10 -left-10 w-32 h-32 bg-purple-300/30 rounded-full blur-2xl"></div>
+      <div class="absolute -bottom-10 -right-10 w-32 h-32 bg-indigo-300/30 rounded-full blur-2xl"></div>
+      
+      <!-- Cat face decorations -->
+      <div class="hidden sm:block absolute w-40 md:w-48 -top-6 -left-6 hover:scale-110 transition-transform duration-300">
+        <img src="images/cat-face-1.png" alt="Cat Face 1" class="w-full h-auto drop-shadow-lg">
+      </div>
+
+      <!-- Breed selector -->
+      <div class="relative z-10">
+        <app-breed-selector [initialBreedId]="breedIdFromQuery()" (breedSelected)="onBreedSelected($event)"></app-breed-selector>
+      </div>
+
+      <div class="hidden sm:block absolute w-40 md:w-48 -bottom-12 -right-6 z-10 hover:scale-110 transition-transform duration-300">
+        <img src="images/cat-face-2.png" alt="Cat Face 2" class="w-full h-auto drop-shadow-lg">
+      </div>
+    </section>
+
+    <!-- Images carousel with animation -->
+    <div class="mb-8 animate-fade-in">
+      <app-breed-images [breedId]="selectedBreed()?.id || null"></app-breed-images>
+    </div>
+
+    <!-- Breed information -->
+    <div class="animate-fade-in" style="animation-delay: 0.1s">
+      <app-breed-info [breed]="selectedBreed() || null"></app-breed-info>
+    </div>
+  </main>
+</div>
