@@ -1,59 +1,179 @@
-# CatBreedsAngular
+# 🐱 Gatopedia - Cat Breeds Explorer
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.0.4.
+Una aplicación web moderna desarrollada en Angular que permite explorar y descubrir información detallada sobre diferentes razas de gatos. Utiliza The Cat API para obtener datos e imágenes de alta calidad.
 
-## Development server
+## ✨ Características
 
-To start a local development server, run:
+- 🏠 **Página de inicio atractiva** con descripción del sitio y navegación intuitiva
+- 🔍 **Búsqueda avanzada** de razas por nombre, origen o temperamento
+- 📱 **Diseño responsive** optimizado para dispositivos móviles y desktop
+- 🎨 **Interfaz moderna** con Tailwind CSS y efectos glassmorphism
+- 🖼️ **Carrusel de imágenes** con 10 fotos por raza
+- 📊 **Información detallada** de cada raza (origen, temperamento, peso, esperanza de vida)
+- 💾 **Caché inteligente** para optimizar llamadas a la API
+- 🎭 **Animaciones suaves** y transiciones fluidas
+- 🔖 **Historial de búsquedas** guardado en localStorage
+
+## 🛠️ Tecnologías Utilizadas
+
+- **Angular 21** - Framework principal
+- **TypeScript 5.9** - Lenguaje de programación
+- **Tailwind CSS 4** - Estilos y diseño
+- **RxJS 7.8** - Programación reactiva
+- **Embla Carousel** - Carrusel de imágenes
+- **Vitest** - Testing unitario
+- **The Cat API** - API de datos de razas de gatos
+
+## 📋 Requisitos Previos
+
+- Node.js 18 o superior
+- npm 10.9.3 o superior
+
+## 🚀 Instalación
+
+1. **Clonar el repositorio**
+```bash
+git clone https://github.com/sohulone/gatopedia.git
+cd gatopedia
+```
+
+2. **Instalar dependencias**
+```bash
+npm install
+```
+
+3. **Configurar variables de entorno**
+
+Crea los archivos de configuración a partir de los ejemplos:
 
 ```bash
+# Para desarrollo
+cp src/environments/environment.development.example.ts src/environments/environment.development.ts
+
+# Para producción
+cp src/environments/environment.example.ts src/environments/environment.ts
+```
+
+Edita los archivos creados y añade tu API Key de [The Cat API](https://thecatapi.com/):
+
+```typescript
+export const environment = {
+  production: false,
+  catApi: {
+    url: 'https://api.thecatapi.com/v1',
+    key: 'TU_API_KEY_AQUI' // Obtén tu key en https://thecatapi.com/signup
+  }
+};
+```
+
+## 💻 Uso
+
+### Servidor de Desarrollo
+
+```bash
+npm start
+# o
 ng serve
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+Abre tu navegador en `http://localhost:4200/`
 
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+### Build de Producción
 
 ```bash
-ng generate component component-name
+npm run build
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+Los archivos compilados estarán en el directorio `dist/`
+
+### Ejecutar Tests
 
 ```bash
-ng generate --help
+npm test
 ```
 
-## Building
-
-To build the project run:
+### Watch Mode para Desarrollo
 
 ```bash
-ng build
+npm run watch
 ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+## 📁 Estructura del Proyecto
 
-## Running unit tests
-
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
-
-```bash
-ng test
+```
+src/
+├── app/
+│   ├── components/          # Componentes reutilizables
+│   │   ├── carousel/        # Carrusel de imágenes
+│   │   ├── navigation/      # Barra de navegación
+│   │   ├── search-modal/    # Modal de búsqueda
+│   │   └── selector/        # Selector dropdown
+│   ├── services/            # Servicios de la aplicación
+│   │   └── cat-api.ts       # Servicio de integración con The Cat API
+│   ├── views/               # Vistas principales
+│   │   ├── home/            # Página de inicio
+│   │   └── breeds/          # Vista de razas
+│   │       └── components/  # Componentes específicos de breeds
+│   │           ├── breed-selector/
+│   │           ├── breed-images/
+│   │           └── breed-info/
+│   ├── app.config.ts        # Configuración de la app
+│   ├── app.routes.ts        # Rutas de la aplicación
+│   └── app.ts               # Componente raíz
+├── environments/            # Configuraciones por entorno
+└── styles.css              # Estilos globales
 ```
 
-## Running end-to-end tests
+## 🎯 Funcionalidades Principales
 
-For end-to-end (e2e) testing, run:
+### Página de Inicio
+- Bienvenida con descripción del sitio
+- Tarjetas informativas sobre las características
+- Botón de acceso directo a la vista de razas
 
-```bash
-ng e2e
-```
+### Vista de Razas
+- Selector de razas con todas las opciones disponibles
+- Carrusel con 10 imágenes de alta calidad
+- Información detallada con iconos temáticos
+- Diseño en grid responsive
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+### Búsqueda
+- Modal de búsqueda accesible desde cualquier vista
+- Búsqueda en tiempo real por nombre, origen o temperamento
+- Historial de búsquedas recientes
+- Miniaturas de cada raza en los resultados
 
-## Additional Resources
+## ⚡ Optimizaciones
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+- **Caché de razas**: El listado de razas se carga una sola vez por sesión
+- **Lazy loading**: Carga diferida de imágenes
+- **Imágenes optimizadas**: Uso de la imagen del listado para búsquedas
+- **Memoización**: Uso de signals para gestión eficiente del estado
+
+## 🤝 Contribución
+
+Las contribuciones son bienvenidas. Por favor:
+
+1. Fork el proyecto
+2. Crea una rama para tu feature (`git checkout -b feature/AmazingFeature`)
+3. Commit tus cambios (`git commit -m 'feat: add some AmazingFeature'`)
+4. Push a la rama (`git push origin feature/AmazingFeature`)
+5. Abre un Pull Request
+
+## 📝 Licencia
+
+Este proyecto es privado y fue desarrollado como prueba técnica.
+
+## 👤 Autor
+
+Desarrollado por [sohulone](https://github.com/sohulone)
+
+## 🔗 Enlaces
+
+- [The Cat API Documentation](https://developers.thecatapi.com/)
+- [Angular Documentation](https://angular.dev/)
+- [Tailwind CSS Documentation](https://tailwindcss.com/docs)
+
+---
+
+⭐ Si te gustó este proyecto, considera darle una estrella en GitHub
