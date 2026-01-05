@@ -4,6 +4,7 @@ Una aplicación web moderna desarrollada en Angular que permite explorar y descu
 
 ## ✨ Características
 
+- 🔐 **Sistema de autenticación** con registro y login
 - 🏠 **Página de inicio atractiva** con descripción del sitio y navegación intuitiva
 - 🔍 **Búsqueda avanzada** de razas por nombre, origen o temperamento
 - 📱 **Diseño responsive** optimizado para dispositivos móviles y desktop
@@ -54,16 +55,81 @@ cp src/environments/environment.development.example.ts src/environments/environm
 cp src/environments/environment.example.ts src/environments/environment.ts
 ```
 
-Edita los archivos creados y añade tu API Key de [The Cat API](https://thecatapi.com/):
+Edita los archivos creados y configura:
+
+**The Cat API Key** - Obtén tu key en [The Cat API](https://thecatapi.com/):
 
 ```typescript
 export const environment = {
   production: false,
+  apiUrl: 'http://localhost:5273/api', // URL de tu backend
   catApi: {
     url: 'https://api.thecatapi.com/v1',
     key: 'TU_API_KEY_AQUI' // Obtén tu key en https://thecatapi.com/signup
   }
 };
+```
+
+4. **Configurar el Backend**
+
+La aplicación requiere un backend que implemente los siguientes endpoints de autenticación:
+
+- `POST /api/users/register` - Registro de nuevos usuarios
+- `POST /api/users/login` - Autenticación de usuarios
+
+Por defecto, la aplicación espera que el backend esté en `http://localhost:5273/api`
+
+## 🔐 API de Autenticación
+
+### POST /api/users/register
+
+**Request Body:**
+```json
+{
+  "email": "user@example.com",
+  "name": "John Doe",
+  "favoriteBreed": "Persian",
+  "avatar": "😺",
+  "password": "password123"
+}
+```
+
+**Response:**
+```json
+{
+  "token": "eyJhbGciOiJIUzI1NiIs...",
+  "user": {
+    "id": "507f1f77bcf86cd799439011",
+    "email": "user@example.com",
+    "name": "John Doe",
+    "favoriteBreed": "Persian",
+    "avatar": "😺"
+  }
+}
+```
+
+### POST /api/users/login
+
+**Request Body:**
+```json
+{
+  "email": "user@example.com",
+  "password": "password123"
+}
+```
+
+**Response:**
+```json
+{
+  "token": "eyJhbGciOiJIUzI1NiIs...",
+  "user": {
+    "id": "507f1f77bcf86cd799439011",
+    "email": "user@example.com",
+    "name": "John Doe",
+    "favoriteBreed": "Persian",
+    "avatar": "😺"
+  }
+}
 ```
 
 ## 💻 Uso
@@ -107,12 +173,20 @@ src/
 │   │   ├── carousel/        # Carrusel de imágenes
 │   │   ├── navigation/      # Barra de navegación
 │   │   ├── search-modal/    # Modal de búsqueda
-│   │   └── selector/        # Selector dropdown
+│   │   ├── selector/        # Selector dropdown
+│   │   └── user-menu/       # Menú de usuario
+│   ├── guards/              # Guards de autenticación
+│   │   └── auth.guard.ts    # Guard para rutas protegidas
+│   ├── models/              # Modelos de datos
+│   │   └── user.ts          # Modelo de usuario
 │   ├── services/            # Servicios de la aplicación
+│   │   ├── auth.ts          # Servicio de autenticación
 │   │   └── cat-api.ts       # Servicio de integración con The Cat API
 │   ├── views/               # Vistas principales
 │   │   ├── home/            # Página de inicio
-│   │   └── breeds/          # Vista de razas
+│   │   ├── login/           # Vista de login
+│   │   ├── register/        # Vista de registro
+│   │   └── breeds/          # Vista de razas (protegida)
 │   │       └── components/  # Componentes específicos de breeds
 │   │           ├── breed-selector/
 │   │           ├── breed-images/
@@ -125,6 +199,13 @@ src/
 ```
 
 ## 🎯 Funcionalidades Principales
+
+### Autenticación
+- Registro de nuevos usuarios con avatar personalizado
+- Login con email y contraseña
+- Protección de rutas con guards
+- Gestión de sesión con tokens JWT
+- Logout y limpieza de sesión
 
 ### Página de Inicio
 - Bienvenida con descripción del sitio
