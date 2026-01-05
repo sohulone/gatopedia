@@ -1,7 +1,13 @@
 import { Injectable, signal } from '@angular/core';
 import { Router } from '@angular/router';
-import { Observable, of } from 'rxjs';
+import { Observable, of, catchError, map } from 'rxjs';
 import { User, RegisterData, LoginData } from '../models/user';
+import { environment } from '../../environments/environment.development';
+
+interface AuthResponse {
+  token: string;
+  user: User;
+}
 
 @Injectable({
   providedIn: 'root',
@@ -10,7 +16,7 @@ export class AuthService {
   private currentUserSignal = signal<User | null>(null);
   currentUser = this.currentUserSignal.asReadonly();
   
-  private readonly USERS_KEY = 'gatopedia_users';
+  private readonly TOKEN_KEY = 'gatopedia_token';
   private readonly CURRENT_USER_KEY = 'gatopedia_current_user';
 
   constructor(private router: Router) {
@@ -19,82 +25,128 @@ export class AuthService {
 
   private loadCurrentUser(): void {
     const userJson = localStorage.getItem(this.CURRENT_USER_KEY);
-    if (userJson) {
+    const token = localStorage.getItem(this.TOKEN_KEY);
+    
+    if (userJson && token) {
       try {
         const user = JSON.parse(userJson);
         this.currentUserSignal.set(user);
       } catch (error) {
         console.error('Error loading user:', error);
-        localStorage.removeItem(this.CURRENT_USER_KEY);
+        this.clearStorage();
       }
     }
   }
 
-  register(data: RegisterData): Observable<{ success: boolean; message: string }> {
-    const users = this.getUsers();
-    
-    if (users.some(u => u.email === data.email)) {
-      return of({ success: false, message: 'El email ya está registrado' });
-    }
+  register(data: RegisterData): Observable<{ success: boolean; message: string; user?: User }> {
+    return new Observable(observer => {
+      fetch(`${environment.apiUrl}/users/register`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      })
+        .then(async response => {
+          const responseData = await response.json();
+          
+          if (!response.ok) {
+            observer.next({ 
+              success: false, 
+              message: responseData.error || 'Error en el registro' 
+            });
+            observer.complete();
+            return;
+          }
 
-    const newUser: User = {
-      id: this.generateId(),
-      email: data.email,
-      name: data.name,
-      favoriteBreed: data.favoriteBreed,
-      avatar: data.avatar,
-    };
+          const { token, user } = responseData as AuthResponse;
+          
+          // Guardar token y usuario
+          localStorage.setItem(this.TOKEN_KEY, token);
+          localStorage.setItem(this.CURRENT_USER_KEY, JSON.stringify(user));
+          this.currentUserSignal.set(user);
 
-    users.push(newUser);
-    localStorage.setItem(this.USERS_KEY, JSON.stringify(users));
-    
-    localStorage.setItem(`pwd_${newUser.id}`, data.password);
-
-    return of({ success: true, message: 'Usuario registrado exitosamente' });
+          observer.next({ 
+            success: true, 
+            message: 'Usuario registrado exitosamente',
+            user 
+          });
+          observer.complete();
+        })
+        .catch(error => {
+          console.error('Error en registro:', error);
+          observer.next({ 
+            success: false, 
+            message: 'Error de conexión con el servidor' 
+          });
+          observer.complete();
+        });
+    });
   }
 
   login(data: LoginData): Observable<{ success: boolean; message: string; user?: User }> {
-    const users = this.getUsers();
-    const user = users.find(u => u.email === data.email);
+    return new Observable(observer => {
+      fetch(`${environment.apiUrl}/users/login`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      })
+        .then(async response => {
+          const responseData = await response.json();
+          
+          if (!response.ok) {
+            observer.next({ 
+              success: false, 
+              message: responseData.error || 'Error en el login' 
+            });
+            observer.complete();
+            return;
+          }
 
-    if (!user) {
-      return of({ success: false, message: 'Usuario no encontrado' });
-    }
+          const { token, user } = responseData as AuthResponse;
+          
+          // Guardar token y usuario
+          localStorage.setItem(this.TOKEN_KEY, token);
+          localStorage.setItem(this.CURRENT_USER_KEY, JSON.stringify(user));
+          this.currentUserSignal.set(user);
 
-    const savedPassword = localStorage.getItem(`pwd_${user.id}`);
-    if (savedPassword !== data.password) {
-      return of({ success: false, message: 'Contraseña incorrecta' });
-    }
-
-    this.currentUserSignal.set(user);
-    localStorage.setItem(this.CURRENT_USER_KEY, JSON.stringify(user));
-    
-    return of({ success: true, message: 'Login exitoso', user });
+          observer.next({ 
+            success: true, 
+            message: 'Login exitoso',
+            user 
+          });
+          observer.complete();
+        })
+        .catch(error => {
+          console.error('Error en login:', error);
+          observer.next({ 
+            success: false, 
+            message: 'Error de conexión con el servidor' 
+          });
+          observer.complete();
+        });
+    });
   }
 
   logout(): void {
+    this.clearStorage();
     this.currentUserSignal.set(null);
-    localStorage.removeItem(this.CURRENT_USER_KEY);
     this.router.navigate(['/login']);
   }
 
   isAuthenticated(): boolean {
-    return this.currentUserSignal() !== null;
+    return this.currentUserSignal() !== null && !!localStorage.getItem(this.TOKEN_KEY);
   }
 
-  private getUsers(): User[] {
-    const usersJson = localStorage.getItem(this.USERS_KEY);
-    if (!usersJson) return [];
-    
-    try {
-      return JSON.parse(usersJson);
-    } catch (error) {
-      console.error('Error parsing users:', error);
-      return [];
-    }
+  getToken(): string | null {
+    return localStorage.getItem(this.TOKEN_KEY);
   }
 
-  private generateId(): string {
-    return `user_${Date.now()}_${Math.random().toString(36).substring(2, 11)}`;
+  private clearStorage(): void {
+    localStorage.removeItem(this.TOKEN_KEY);
+    localStorage.removeItem(this.CURRENT_USER_KEY);
   }
 }
+
